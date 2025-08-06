@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carnexo - Venta de Autos</title>
+    <style>
+        /* ==== ESTILOS GENERALES ==== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            background-color: #d9d9d9;
+            color: #000;
+            line-height: 1.6;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            max-width: 1200px;
+        }
+
+        /* ==== HEADER ==== */
+        header {
+            background: #000;
+            padding: 1rem 0;
+            border-bottom: 3px solid #fff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header img {
+            height: 50px;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav a {
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #d9d9d9;
+        }
+
+        /* ==== HERO ==== */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 5rem 1rem;
+            background: url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d') center/cover no-repeat;
+        }
+        .hero::after {
+            content: "";
+            position: absolute;
+            top:0;left:0;width:100%;height:100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+        }
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #fff;
+            color: #000;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #000;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        /* ==== SERVICIOS ==== */
+        .services {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .services h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        .service-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+        }
+        .service-card {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #000;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .service-card h4 {
+            margin-bottom: 1rem;
+        }
+
+        /* ==== CATÁLOGO ==== */
+        .catalog {
+            padding: 4rem 0;
+        }
+        .catalog h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        .car-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+        .car-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .car-card img {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .car-info {
+            padding: 1rem;
+        }
+        .car-info h4 {
+            margin-bottom: 0.5rem;
+        }
+        .car-info p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .car-info button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .car-info button:hover {
+            background: #444;
+        }
+
+        /* ==== MODAL ==== */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 10px;
+            max-width: 600px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transform: translateY(-50px);
+            opacity: 0;
+            animation: slideIn 0.4s forwards;
+        }
+        .modal-content img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #000;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes slideIn {
+            from {transform: translateY(-50px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        /* ==== FOOTER ==== */
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 1rem;
+            color: #fff;
+            border-top: 2px solid #fff;
+            font-size: 0.9rem;
+        }
+
+        /* ==== BOTÓN WHATSAPP FLOTANTE ==== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: #fff;
+            font-size: 2rem;
+            padding: 0.5rem 0.7rem;
+            border-radius: 50%;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 2000;
+            transition: transform 0.3s;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+          <img src="logo-carnexo.png" alt="Carnexo Logo">            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#catalogo">Catálogo</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h2>La manera más fácil de vender tu coche</h2>
+            <p>Nosotros nos encargamos de todo, tú solo firmas y cobras.</p>
+            <a href="https://wa.me/521442XXXXXXX" target="_blank" class="btn">Vende tu auto ahora</a>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios" class="services container">
+        <h3>Nuestros Servicios</h3>
+        <div class="service-grid">
+            <div class="service-card">
+                <h4>Revisión Jurídica</h4>
+                <p>Validamos que tu auto esté libre de adeudos o problemas legales.</p>
+            </div>
+            <div class="service-card">
+                <h4>Publicación Estratégica</h4>
+                <p>Promocionamos tu auto en plataformas con mayor alcance.</p>
+            </div>
+            <div class="service-card">
+                <h4>Filtrado de Compradores</h4>
+                <p>Solo recibes ofertas reales y seguras para tu tranquilidad.</p>
+            </div>
+            <div class="service-card">
+                <h4>Gestión Completa</h4>
+                <p>Te acompañamos hasta la firma de contrato y validación del pago.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <section id="catalogo" class="catalog container">
+        <h3>Catálogo de Autos</h3>
+        <div class="car-grid">
+            <!-- 6 EJEMPLOS -->
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d" alt="Ford Edge 2013">
+                <div class="car-info">
+                    <h4>Ford Edge 2013</h4>
+                    <p>$250,000 MXN</p>
+                    <button onclick="openModal('Ford Edge 2013', 'Motor V6 3.5L, en excelente estado mecánico y estético. Entrega con baja de Guanajuato.', 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d')">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1493238792000-8113da705763" alt="Honda Civic 2018">
+                <div class="car-info">
+                    <h4>Honda Civic 2018</h4>
+                    <p>$310,000 MXN</p>
+                    <button onclick="openModal('Honda Civic 2018', 'Transmisión automática, único dueño, papeles en regla y servicios de agencia.', 'https://images.unsplash.com/photo-1493238792000-8113da705763')">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c" alt="Mazda 3 2020">
+                <div class="car-info">
+                    <h4>Mazda 3 2020</h4>
+                    <p>$350,000 MXN</p>
+                    <button onclick="openModal('Mazda 3 2020', 'Sedán, transmisión automática, excelente consumo de combustible.', 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c')">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b" alt="Chevrolet Onix 2019">
+                <div class="car-info">
+                    <h4>Chevrolet Onix 2019</h4>
+                    <p>$230,000 MXN</p>
+                    <button onclick="openModal('Chevrolet Onix 2019', 'Compacto, excelente rendimiento y estado estético impecable.', 'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b')">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def" alt="Toyota Corolla 2021">
+                <div class="car-info">
+                    <h4>Toyota Corolla 2021</h4>
+                    <p>$400,000 MXN</p>
+                    <button onclick="openModal('Toyota Corolla 2021', 'Vehículo seminuevo, único dueño, servicios de agencia al día.', 'https://images.unsplash.com/photo-1504215680853-026ed2a45def')">Ver Detalles</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d" alt="Volkswagen Jetta 2017">
+                <div class="car-info">
+                    <h4>Volkswagen Jetta 2017</h4>
+                    <p>$270,000 MXN</p>
+                    <button onclick="openModal('Volkswagen Jetta 2017', 'Versión Highline, transmisión automática y excelente estado mecánico.', 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d')">Ver Detalles</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODAL -->
+    <div id="carModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Auto">
+            <h4 id="modalTitle"></h4>
+            <p id="modalDescription"></p>
+            <a id="whatsappLink" href="#" target="_blank" class="btn">Contactar por WhatsApp</a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contacto">
+        <p>© 2025 Carnexo | Síguenos en <a href="https://www.instagram.com/carnexo_mx" target="_blank">@carnexo_mx</a></p>
+    </footer>
+
+    <!-- BOTÓN WHATSAPP FLOTANTE -->
+    <a href="https://wa.me/521442XXXXXXX" target="_blank" class="whatsapp-float">💬</a>
+
+    <!-- JS PARA MODAL -->
+    <script>
+        function openModal(title, description, image) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDescription').innerText = description;
+            document.getElementById('modalImage').src = image;
+            document.getElementById('whatsappLink').href = `https://wa.me/521442XXXXXXX?text=Hola, me interesa el auto ${title}`;
+            document.getElementById('carModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('carModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('carModal')) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
